@@ -3,7 +3,7 @@ const createError = require('http-errors');
 const morgan = require('morgan');
 const cors = require('cors');
 const connectDB = require('./config/db');
-
+const PortfolioRoutes=require('./routes/Portfolio.routes');
 const ResumeRoutes=require('./routes/Resume.Routes');
 const ProductRoutes=require('./routes/Products.routes');
 const authenticationRoutes=require('./routes/User.routes');
@@ -14,7 +14,7 @@ const AboutRoutes=require('./routes/About.routes');
 const ContactRoutes=require('./routes/Contact.routes');
 const BrandRoutes=require('./routes/Partnership.routes');
 const ServiceRoutes=require('./routes/Service.routes');
-
+const PolicyRoutes=require('./routes/Privacy.routes');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,9 +31,11 @@ app.use('/about',AboutRoutes);
 app.use('/contact', ContactRoutes);
 app.use('/product',ProductRoutes);
 app.use('/services',ServiceRoutes);
+app.use('/portfolio',PortfolioRoutes)
 app.use('/Brand',BrandRoutes);
 app.use('/testimonial', TestimonialRoutes);
 app.use('/teams',TeamRoutes)
+app.use('/policy',PolicyRoutes);
 app.use('/resume',ResumeRoutes)
 // Middleware for handling 404 errors
 app.use((req, res, next) => {

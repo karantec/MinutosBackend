@@ -1,27 +1,21 @@
-const Policy = require("../models/PrivacyPolicy.mode");
+const Policy = require("../models/PrivacyPolicy.model");
 
-// **Create or Update Privacy Policy / Terms**
+// **Create or Update Policy**
 const createOrUpdatePolicy = async (req, res) => {
   try {
-    const { type, content } = req.body;
+    const { content } = req.body;
 
-    // Validate type
-    if (!["privacy_policy", "terms_conditions"].includes(type)) {
-      return res.status(400).json({ message: "Invalid policy type" });
-    }
-
-    // Find existing policy by type
-    let policy = await Policy.findOne({ type });
+    // Check if a policy already exists
+    let policy = await Policy.findOne();
 
     if (policy) {
-      // Update existing policy
       policy.content = content;
       await policy.save();
       return res.status(200).json({ message: "Policy updated successfully", policy });
     }
 
-    // Create new policy
-    policy = new Policy({ type, content });
+    // Create a new policy if none exists
+    policy = new Policy({ content });
     await policy.save();
     res.status(201).json({ message: "Policy created successfully", policy });
 
@@ -31,14 +25,12 @@ const createOrUpdatePolicy = async (req, res) => {
   }
 };
 
-// **Get Policy by Type (Privacy Policy or Terms)**
-const getPolicyByType = async (req, res) => {
+// **Get the Policy**
+const getPolicy = async (req, res) => {
   try {
-    const { type } = req.params;
-
-    const policy = await Policy.findOne({ type });
+    const policy = await Policy.findOne();
     if (!policy) {
-      return res.status(404).json({ message: `${type} not found` });
+      return res.status(404).json({ message: "Policy not found" });
     }
 
     res.status(200).json(policy);
@@ -48,30 +40,35 @@ const getPolicyByType = async (req, res) => {
   }
 };
 
+// **Get All Policies**
 const getAllPolicies = async (req, res) => {
-    try {
-      const policies = await Policy.find();
-      res.status(200).json(policies);
-    } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({ message: "Server error", error: error.message });
-    }
-  };
-// **Delete Policy by Type**
-const deletePolicyByType = async (req, res) => {
   try {
-    const { type } = req.params;
+    const policies = await Policy.find();
 
-    const policy = await Policy.findOneAndDelete({ type });
-    if (!policy) {
-      return res.status(404).json({ message: `${type} not found` });
+    if (policies.length === 0) {
+      return res.status(404).json({ message: "No policies found" });
     }
 
-    res.status(200).json({ message: `${type} deleted successfully` });
+    res.status(200).json({ message: "Policies retrieved successfully", policies });
+  } catch (error) {
+    console.error("Error retrieving policies:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// **Delete Policy**
+const deletePolicy = async (req, res) => {
+  try {
+    const policy = await Policy.findOneAndDelete();
+    if (!policy) {
+      return res.status(404).json({ message: "No policy found to delete" });
+    }
+
+    res.status(200).json({ message: "Policy deleted successfully" });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-module.exports = { createOrUpdatePolicy, getPolicyByType, getAllPolicies, deletePolicyByType };
+module.exports = { createOrUpdatePolicy,  getAllPolicies, deletePolicy };

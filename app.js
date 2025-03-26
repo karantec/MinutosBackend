@@ -15,6 +15,7 @@ const ContactRoutes=require('./routes/Contact.routes');
 const BrandRoutes=require('./routes/Partnership.routes');
 const ServiceRoutes=require('./routes/Service.routes');
 const PolicyRoutes=require('./routes/Privacy.routes');
+const TermsRoutes=require('./routes/Terms.routes');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -36,6 +37,7 @@ app.use('/Brand',BrandRoutes);
 app.use('/testimonial', TestimonialRoutes);
 app.use('/teams',TeamRoutes)
 app.use('/policy',PolicyRoutes);
+app.use('/terming',TermsRoutes)
 app.use('/resume',ResumeRoutes)
 // Middleware for handling 404 errors
 app.use((req, res, next) => {

@@ -53,6 +53,19 @@ app.use((err, req, res, next) => {
   });
 });
 
+let isMaintenanceMode = false; // Store maintenance mode state
+
+// API to toggle maintenance mode
+app.post('/maintenance', (req, res) => {
+  isMaintenanceMode = !isMaintenanceMode;
+  res.json({ maintenanceMode: isMaintenanceMode, message: isMaintenanceMode ? 'Maintenance mode enabled' : 'Maintenance mode disabled' });
+});
+
+// Middleware to check maintenance mode
+app.get('/maintenance', (req, res) => {
+  res.json({ maintenanceMode: isMaintenanceMode });
+});
+
 // Connect to the database
 connectDB();
 

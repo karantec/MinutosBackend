@@ -4,7 +4,7 @@ const About = require("../models/About.model");
 // **Create a New About Section with Image Upload**
 const createAbout = async (req, res) => {
     try {
-      const { title, description, image,linkedin,facebook,Instagram,twitter,username,whatsapp } = req.body;
+      const { title, description, image,linkedin,facebook,Instagram,twitter,whatsapp } = req.body;
   
       // Check if the About section with the same title already exists
       const existingAbout = await About.findOne({ title });
@@ -14,7 +14,7 @@ const createAbout = async (req, res) => {
       }
   
       // Create a new About section
-      const newAbout = new About({ title, description, image,linkedin,facebook,Instagram,twitter,username,whatsapp });
+      const newAbout = new About({ title, description, image,linkedin,facebook,Instagram,twitter,whatsapp });
       await newAbout.save();
   
       res.status(201).json({ message: "About created successfully", about: newAbout });
@@ -48,7 +48,7 @@ const updateAbout = async (req, res) => {
 
     const updatedAbout = await About.findByIdAndUpdate(
       id,
-      { title, description, images,linkedin,facebook,Instagram,twitter,username,whatsapp },
+      { title, description, images,linkedin,facebook,Instagram,twitter,whatsapp },
       { new: true }
     );
 

@@ -8,7 +8,7 @@ const aboutUsSchema = new mongoose.Schema({
     facebook:{type:String,required:true} ,
     Instagram:{type:String,required:true},
     twitter:{type:String,required:true},
-    username:{type:String,required:true},
+    
     whatsapp:{type:String,required:true},
 }, { timestamps: true });
 

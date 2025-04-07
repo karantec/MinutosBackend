@@ -3,19 +3,9 @@ const createError = require('http-errors');
 const morgan = require('morgan');
 const cors = require('cors');
 const connectDB = require('./config/db');
-const PortfolioRoutes=require('./routes/Portfolio.routes');
-const ResumeRoutes=require('./routes/Resume.Routes');
-const ProductRoutes=require('./routes/Products.routes');
-const authenticationRoutes=require('./routes/User.routes');
-const Job=require('./routes/Job.routes');
-const TestimonialRoutes=require('./routes/Testimonial.routes')
-const TeamRoutes=require('./routes/Team.routes')
-const AboutRoutes=require('./routes/About.routes');
-const ContactRoutes=require('./routes/Contact.routes');
-const BrandRoutes=require('./routes/Partnership.routes');
-const ServiceRoutes=require('./routes/Service.routes');
-const PolicyRoutes=require('./routes/Privacy.routes');
-const TermsRoutes=require('./routes/Terms.routes');
+
+const authenticationRoutes=require('./routes/User.route');
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,24 +15,17 @@ app.use(morgan('dev'));
 app.get('/', async (req, res, next) => {
   res.send({ message: 'Awesome it works 🐻' });
 });
+require('dotenv').config();
 app.use(cors());
+
 app.use('/auth',authenticationRoutes)
-app.use('/job',Job);
-app.use('/about',AboutRoutes);
-app.use('/contact', ContactRoutes);
-app.use('/product',ProductRoutes);
-app.use('/services',ServiceRoutes);
-app.use('/portfolio',PortfolioRoutes)
-app.use('/Brand',BrandRoutes);
-app.use('/testimonial', TestimonialRoutes);
-app.use('/teams',TeamRoutes)
-app.use('/policy',PolicyRoutes);
-app.use('/terming',TermsRoutes)
-app.use('/resume',ResumeRoutes)
+
+
 // Middleware for handling 404 errors
 app.use((req, res, next) => {
   next(createError.NotFound());
 });
+connectDB()
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -56,15 +39,9 @@ app.use((err, req, res, next) => {
 let isMaintenanceMode = false; // Store maintenance mode state
 
 // API to toggle maintenance mode
-app.post('/maintenance', (req, res) => {
-  isMaintenanceMode = !isMaintenanceMode;
-  res.json({ maintenanceMode: isMaintenanceMode, message: isMaintenanceMode ? 'Maintenance mode enabled' : 'Maintenance mode disabled' });
-});
 
-// Middleware to check maintenance mode
-app.get('/maintenance', (req, res) => {
-  res.json({ maintenanceMode: isMaintenanceMode });
-});
+
+
 
 // Connect to the database
 connectDB();
